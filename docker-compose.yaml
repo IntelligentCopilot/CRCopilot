@@ -5,6 +5,39 @@ services:
     image: qdrant/qdrant:latest
     container_name: qdrant
     volumes:
-      - "./qdrant_storage:/qdrant/storage:z"
+      - "${PWD}/volumes/qdrant_storage:/qdrant/storage:z"
     ports:
       - "6333:6333"
+  gitea:
+    image: gitea/gitea:1.20.4
+    container_name: gitea
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__database__DB_TYPE=mysql
+      - GITEA__database__HOST=mysql:3306
+      - GITEA__database__NAME=gitea
+      - GITEA__database__USER=gitea
+      - GITEA__database__PASSWD=gitea
+    restart: always
+    volumes:
+      - ${PWD}/volumes/gitea:/data
+      # - /etc/timezone:/etc/timezone:ro
+      - /usr/share/zoneinfo:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "222:22"
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=gitea
+      - MYSQL_USER=gitea
+      - MYSQL_PASSWORD=gitea
+      - MYSQL_DATABASE=gitea
+    volumes:
+      - ${PWD}/volumes/mysql:/var/lib/mysql

@@ -24,7 +24,7 @@ def get_embedding(text: List[str] | str) -> np.ndarray:
 
 
 def add_embeddings():
-    files = read_files_in_directory(folder_path="./docs")
+    files = read_files_in_directory(folder_path)
     points = []
 
     for index, item in enumerate(files):

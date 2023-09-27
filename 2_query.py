@@ -18,8 +18,11 @@ def get_embedding(text: List[str] | str) -> np.ndarray:
 
     return model.encode(text)
 
+
 limit = 1
 # threshold = 0.8
+
+
 def query(text):
     query_vector = get_embedding(text)
     hits = client.search(
@@ -30,19 +33,22 @@ def query(text):
     context = ''
     for item in hits:
         context = item.payload['file_content']
-        print("Id:", item.id)
-        print("Version:", item.version)
-        print("Score:", item.score)
-        # print("Payload:", item.payload)
+        # print("Id:", item.id)
+        # print("Version:", item.version)
+        # print("Score:", item.score)
+        print("Payload:", item.payload)
         print("---")  # 用于分隔每个字典
     return context
 
+
 if __name__ == "__main__":
-    query('''export default function Image() {
+    query('''
+          export default function Image() {
   return (
     <img
       src="https://i.imgur.com/ZF6s192.jpg"
       alt="'Floralis Genérica' by Eduardo Catalano: a gigantic metallic flower sculpture with reflective petals"
     />
   );
-}''')
+}
+          ''')

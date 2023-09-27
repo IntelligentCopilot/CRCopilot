@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 models
-qdrant_storage
+volumes
+/doc.md
 
 .DS_Store
