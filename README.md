@@ -37,6 +37,21 @@ http://localhost:3000/
 python web_demo.py
 ```
 
+### 命令行
+![api_cli_access](docs/images/api_cli_access.png)
+
+运行仓库中 [api_cli_access.py](api_cli_access.py)：
+
+```shell
+# 启动本地大模型服务
+python api_cli.py
+# 命令行交互
+python api_cli_access.py
+```
+
+程序会在命令行中进行交互式的对话，在命令行中输入指示并回车即可生成回复
+
+
 ### API 部署
 首先需要安装额外的依赖 `pip install fastapi uvicorn`，然后运行仓库中的 [api.py](api.py)：
 ```shell
