@@ -4,6 +4,7 @@ services:
   qdrant:
     image: qdrant/qdrant:latest
     container_name: qdrant
+    restart: always
     volumes:
       - "${PWD}/volumes/qdrant_storage:/qdrant/storage:z"
     ports:
