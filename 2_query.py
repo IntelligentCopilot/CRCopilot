@@ -32,11 +32,12 @@ def query(text):
     )
     context = ''
     for item in hits:
-        context = item.payload['file_content']
+        context = item.payload['page_content']
         # print("Id:", item.id)
         # print("Version:", item.version)
-        # print("Score:", item.score)
-        print("Payload:", item.payload)
+        # print("Payload:", item.payload)
+        print("Score:", item.score)
+        print("Payload metadata:", item.payload['metadata'])
         print("---")  # 用于分隔每个字典
     return context
 

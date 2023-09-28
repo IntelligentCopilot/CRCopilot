@@ -1,17 +1,19 @@
 from typing import List
 
+from langchain.document_loaders import DirectoryLoader
+from langchain.docstore.document import Document
+from langchain.document_loaders import TextLoader
 import numpy as np
 from FlagEmbedding import FlagModel
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import PointStruct
-from utils.read_files import read_files_in_directory
 
 
 collection_name = "knowledge_collection"
 qdrant_url = "http://localhost:6333"
 client = QdrantClient(qdrant_url)
 
-folder_path = "./docs"
+folder_path = "./knowledges"
 
 
 def get_embedding(text: List[str] | str) -> np.ndarray:
@@ -23,20 +25,27 @@ def get_embedding(text: List[str] | str) -> np.ndarray:
     return model.encode(text)
 
 
+def load_knowledges(folder_path) -> List[Document]:
+    print('loading knowledges')
+    loader = DirectoryLoader(path=folder_path, glob="**/*.md", loader_cls=TextLoader, show_progress=True)
+    docs = loader.load()
+    # for doc in docs:
+    #     print(doc)
+    return docs
+
+
 def add_embeddings():
-    files = read_files_in_directory(folder_path)
+    docs = load_knowledges(folder_path)
     points = []
-
-    for index, item in enumerate(files):
+    print('embedding')
+    for index, item in enumerate(docs):
         points.append(PointStruct(id=index, vector=get_embedding(
-            item["file_path"]), payload=item))
-
+            item.page_content), payload=item.to_json()['kwargs']))
     operation_info = client.upsert(
         collection_name=collection_name,
         wait=True,
         points=points
     )
-
     print(operation_info)
 
 
