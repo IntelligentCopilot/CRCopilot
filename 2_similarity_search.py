@@ -12,11 +12,11 @@ client = QdrantClient(qdrant_url)
 
 def get_embedding(text: List[str] | str) -> np.ndarray:
 
-    model = FlagModel('BAAI/bge-large-zh-v1.5',
+    flag_model = FlagModel('BAAI/bge-large-zh-v1.5',
                       query_instruction_for_retrieval="为这个句子生成表示以用于检索相关文章：",
                       use_fp16=False)
 
-    return model.encode(text)
+    return flag_model.encode(text)
 
 
 limit = 1

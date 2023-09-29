@@ -16,19 +16,19 @@ client = QdrantClient(qdrant_url)
 
 folder_path = "./knowledges"
 
+flag_model = FlagModel('models/BAAI/bge-large-zh-v1.5',
+                       query_instruction_for_retrieval="为这个句子生成表示以用于检索相关文章：",
+                       use_fp16=False)
+
 
 def get_embedding(text: List[str] | str) -> np.ndarray:
-
-    model = FlagModel('BAAI/bge-large-zh-v1.5',
-                      query_instruction_for_retrieval="为这个句子生成表示以用于检索相关文章：",
-                      use_fp16=False)
-
-    return model.encode(text)
+    return flag_model.encode(text)
 
 
 def load_knowledges(folder_path) -> List[Document]:
     print('loading knowledges')
-    loader = DirectoryLoader(path=folder_path, glob="**/*.md", loader_cls=TextLoader, show_progress=True)
+    loader = DirectoryLoader(
+        path=folder_path, glob="**/*.md", loader_cls=TextLoader, show_progress=True)
     docs = loader.load()
     text_spliter = CharacterTextSplitter(chunk_size=1024, chunk_overlap=128)
     split_docs = text_spliter.split_documents(docs)
@@ -43,9 +43,9 @@ def add_embeddings():
     points = []
     print('embedding, total: ', len(docs))
     for index, item in enumerate(docs):
-        print(index+1)
+        print(index+1, ' ', item.metadata)
         points.append(PointStruct(id=index, vector=get_embedding(
-            item.page_content), payload=item.metadata))
+            item.page_content), payload=item.to_json()['kwargs']))
     operation_info = client.upsert(
         collection_name=collection_name,
         wait=True,

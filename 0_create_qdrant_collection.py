@@ -22,3 +22,10 @@ if __name__ == "__main__":
 # 浏览器访问 
 # http://localhost:6333/collections
 # {"result":{"collections":[{"name":"knowledge_collection"}]},"status":"ok","time":0.000047334}
+
+# 删除 collection
+# curl -L -X DELETE 'http://localhost:6333/collections/knowledge_collection' \
+# -H 'Content-Type: application/json' \
+# --data-raw '{
+# }'
+

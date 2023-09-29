@@ -9,6 +9,11 @@ services:
       - "${PWD}/volumes/qdrant_storage:/qdrant/storage:z"
     ports:
       - "6333:6333"
+  # qdrant-web-ui:
+  #   image: ttamg76/qdrant-web-ui:latest
+  #   container_name: qdrant-web-ui
+  #   ports:
+  #     - "8080:80"
   gitea:
     image: gitea/gitea:1.20.4
     container_name: gitea
