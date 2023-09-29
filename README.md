@@ -2,6 +2,17 @@ CRCopilot 是一个基于 LLM 大语言模型且完全免费的 Code Review 系�
 
 基于 Docker 部署。
 
+### 配置 python 环境
+```shell
+conda create --name crcopilot python=3.10
+conda activate crcopilot
+```
+
+### 安装依赖
+```shell
+pip install -r requirements.txt
+```
+
 ## 使用 Docker 启动必要服务
 包括：
 
@@ -12,17 +23,6 @@ Git服务 Gitea http://localhost:3000
 关系型数据库 MySQL
 ```shell
 docker-compose up -d
-```
-
-### 配置 python 环境
-```shell
-conda create --name crcopilot python=3.10
-conda activate crcopilot
-```
-
-### 安装依赖
-```shell
-pip install -r requirements.txt
 ```
 
 ### git服务
