@@ -32,7 +32,7 @@ async def create_item(request: Request):
     response, history = model.chat(tokenizer,
                                    prompt,
                                    history=history,
-                                   max_length=max_length if max_length else 2048,
+                                   max_length=max_length if max_length else 10240,
                                    top_p=top_p if top_p else 0.7,
                                    temperature=temperature if temperature else 0.95)
     now = datetime.datetime.now()

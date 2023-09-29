@@ -3,6 +3,7 @@ from typing import List
 from langchain.document_loaders import DirectoryLoader
 from langchain.docstore.document import Document
 from langchain.document_loaders import TextLoader
+from langchain.text_splitter import CharacterTextSplitter
 import numpy as np
 from FlagEmbedding import FlagModel
 from qdrant_client import QdrantClient
@@ -29,18 +30,22 @@ def load_knowledges(folder_path) -> List[Document]:
     print('loading knowledges')
     loader = DirectoryLoader(path=folder_path, glob="**/*.md", loader_cls=TextLoader, show_progress=True)
     docs = loader.load()
+    text_spliter = CharacterTextSplitter(chunk_size=1024, chunk_overlap=128)
+    split_docs = text_spliter.split_documents(docs)
+    # print(split_docs[:2])
     # for doc in docs:
     #     print(doc)
-    return docs
+    return split_docs
 
 
 def add_embeddings():
     docs = load_knowledges(folder_path)
     points = []
-    print('embedding')
+    print('embedding, total: ', len(docs))
     for index, item in enumerate(docs):
+        print(index+1)
         points.append(PointStruct(id=index, vector=get_embedding(
-            item.page_content), payload=item.to_json()['kwargs']))
+            item.page_content), payload=item.metadata))
     operation_info = client.upsert(
         collection_name=collection_name,
         wait=True,
